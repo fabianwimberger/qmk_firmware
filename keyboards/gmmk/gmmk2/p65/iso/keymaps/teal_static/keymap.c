@@ -47,3 +47,30 @@ void keyboard_post_init_user(void) {
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
     rgb_matrix_sethsv_noeeprom(50, 160, 150);
 }
+
+static const uint8_t fn_leds[] = {
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+    50, 51, 52, 54
+};
+
+static void set_led(uint8_t led_min, uint8_t led_max, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
+    if (led >= led_min && led < led_max) {
+        rgb_matrix_set_color(led, r, g, b);
+    }
+}
+
+static void set_leds(uint8_t led_min, uint8_t led_max, const uint8_t *leds, uint8_t count, uint8_t r, uint8_t g, uint8_t b) {
+    for (uint8_t i = 0; i < count; i++) {
+        set_led(led_min, led_max, leds[i], r, g, b);
+    }
+}
+
+void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (host_keyboard_led_state().caps_lock) {
+        set_led(led_min, led_max, 30, 204, 0, 0);
+    }
+
+    if (layer_state_is(1)) {
+        set_leds(led_min, led_max, fn_leds, sizeof(fn_leds) / sizeof(fn_leds[0]), 204, 0, 0);
+    }
+}
