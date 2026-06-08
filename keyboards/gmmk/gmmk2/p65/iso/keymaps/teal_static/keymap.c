@@ -67,7 +67,11 @@ static void set_leds(uint8_t led_min, uint8_t led_max, const uint8_t *leds, uint
 
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     if (host_keyboard_led_state().caps_lock) {
-        set_led(led_min, led_max, 30, 204, 0, 0);
+        for (uint8_t i = led_min; i < led_max; i++) {
+            rgb_matrix_set_color(i, 0, 0, 255);
+        }
+
+        return;
     }
 
     if (layer_state_is(1)) {
